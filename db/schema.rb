@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 20170426082348) do
   create_table "user_skills", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "skill_id"
-    t.integer  "count"
+    t.integer  "count",                default: 0
     t.integer  "status",     limit: 1, default: 0, null: false
     t.datetime "created_at",                       null: false
     t.datetime "updated_at",                       null: false
