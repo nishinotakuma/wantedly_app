@@ -21,10 +21,10 @@ ActiveRecord::Schema.define(version: 20170426082348) do
   create_table "user_skills", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "skill_id"
-    t.integer  "count",                default: 0
-    t.integer  "status",     limit: 1, default: 0, null: false
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
+    t.integer  "count",      default: 0
+    t.integer  "status",     default: 0
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
     t.index ["skill_id"], name: "index_user_skills_on_skill_id"
     t.index ["user_id", "skill_id"], name: "index_user_skills_on_user_id_and_skill_id", unique: true
     t.index ["user_id"], name: "index_user_skills_on_user_id"

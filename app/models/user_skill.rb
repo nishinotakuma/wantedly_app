@@ -1,6 +1,6 @@
 class UserSkill < ApplicationRecord
 
-  enum status: {published: 0, private: 1}
+  enum status: {published: 0, hidden: 1}
 
   belongs_to :user, class_name: "User"
   belongs_to :skill, class_name: "Skill"
