@@ -3,7 +3,7 @@
 <% if @skills %>
 <ul>
   <% @skills.each do |skill| %>
-    <li><%= skill.name %></li>
+    <%= link_to "#{skill.name}", :controller => "", :action => "" %>
   <% end %>
 </ul>
 <% end %>
