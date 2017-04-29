@@ -10,7 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170427045614) do
+ActiveRecord::Schema.define(version: 20170428191700) do
+
+  create_table "add_skill_counts", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "user_skill_id"
+    t.integer  "status",        default: 0
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.index ["user_id", "user_skill_id"], name: "index_add_skill_counts_on_user_id_and_user_skill_id", unique: true
+    t.index ["user_id"], name: "index_add_skill_counts_on_user_id"
+    t.index ["user_skill_id"], name: "index_add_skill_counts_on_user_skill_id"
+  end
 
   create_table "skills", force: :cascade do |t|
     t.string   "name"

@@ -5,4 +5,5 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable
   has_many :user_skills, dependent: :destroy
   has_many :skills, through: :user_skills
+  has_many :add_skill_counts, dependent: :destroy
 end
