@@ -21,3 +21,5 @@
 .byebug_history
 
 /client/node_modules
+
+/app/assets/javascripts/webpack
