@@ -4,4 +4,5 @@ Rails.application.routes.draw do
   root 'users#index'
   resources :users
   resources :skills
+  get 'users/:id/get_skills', to: 'users#get_skills'
 end

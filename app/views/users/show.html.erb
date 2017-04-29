@@ -1,21 +1,9 @@
 <h1><%= @user.name %>さんのプロフィール画面</h1>
-<h2>スキル・特徴</h2>
-<% if @skills %>
-<ul>
-  <% @skills.each do |skill| %>
-    <%= link_to "#{skill.name}", :controller => "", :action => "" %>
-  <% end %>
-</ul>
-<% end %>
-<h2>スキル追加</h2>
-<form>
-  <input type="text"/>
-  <input type="submit" value="登録"/>
-</form>
-
-<div id="react_test"></div>
-<%= javascript_include_tag "webpack/app" %>
 
 <script>
-  var name = <%= @name %> 
+  var url = "/users/<%= @user.id %>/get_skills"
 </script>
+
+<h2>スキル・特徴</h2>
+<div id="skill_box"></div>
+<%= javascript_include_tag "webpack/app" %>
