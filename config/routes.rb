@@ -5,4 +5,6 @@ Rails.application.routes.draw do
   resources :users
   resources :skills
   get 'users/:id/get_skills', to: 'users#get_skills'
+  get 'users/:id/get_skills_suggestion', to: 'users#get_skills_suggestion'
+  post 'users/:id/update_skills', to: 'users#update_skills'
 end
