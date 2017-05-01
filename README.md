@@ -1,5 +1,9 @@
 # README
 
+## ログイン
+email: "wantedly@test.com"
+password: "wantedly"
+
 ## 仕様
 ### 必須
 - スキルは、自分に追加することができる。
