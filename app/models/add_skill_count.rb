@@ -1,5 +1,5 @@
 class AddSkillCount < ApplicationRecord
-  belongs_to :user
+  belongs_to :user, class_name: "User"
   belongs_to :user_skill
 
   validates :user_id, presence: true

@@ -12,6 +12,8 @@
     <p class="notice"><%= notice %></p>
     <p class="alert"><%= alert %></p>
 
+    <span><a href='/users/<%= current_user.id %>'><%= current_user.name %></a>さんでログイン中</span>
+
     <%= yield %>
   </body>
 </html>

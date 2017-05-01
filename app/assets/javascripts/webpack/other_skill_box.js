@@ -22222,7 +22222,8 @@ var OtherSkillBox = function (_React$Component) {
     }
   }, {
     key: 'submitAddSkills',
-    value: function submitAddSkills() {
+    value: function submitAddSkills(e) {
+      e.preventDefault;
       var url = "/users/" + user_id + "/update_other_skill";
       var _state = this.state,
           value = _state.value,
@@ -22315,7 +22316,7 @@ var OtherSkillBox = function (_React$Component) {
           ),
           _react2.default.createElement(
             'form',
-            { onSubmit: this.onFormSubmit },
+            { onSubmit: this.submitAddSkills },
             _react2.default.createElement(_reactAutosuggest2.default, {
               suggestions: suggestions,
               onSuggestionsFetchRequested: this.onSuggestionsFetchRequested,
@@ -22339,7 +22340,7 @@ var OtherSkillBox = function (_React$Component) {
           _react2.default.createElement(
             'button',
             { onClick: this.changeToRecommendMode },
-            '\u30B9\u30AD\u30EB\u3092\u4F5C\u6210\u3059\u308B'
+            '\u30B9\u30AD\u30EB\u3092\u63A8\u85A6\u3059\u308B'
           ),
           _react2.default.createElement(SkillList, { skills: this.state.skills, updateCountToSkill: this.updateCountToSkill })
         );

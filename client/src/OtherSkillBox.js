@@ -81,7 +81,8 @@ class OtherSkillBox extends React.Component {
     });
   };
 
-  submitAddSkills(){
+  submitAddSkills(e){
+    e.preventDefault;
     const url = "/users/" + user_id + "/update_other_skill";
     const {value,skills} = this.state;
     if (skills.some(function(skill){
@@ -151,7 +152,7 @@ class OtherSkillBox extends React.Component {
       return (
         <div>
           <button onClick={this.changeToRecommendMode}>キャンセル</button>
-          <form onSubmit={this.onFormSubmit}>
+          <form onSubmit={this.submitAddSkills}>
             <Autosuggest
                 suggestions={suggestions}
                 onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
@@ -168,7 +169,7 @@ class OtherSkillBox extends React.Component {
     } else{
       return (
         <div>
-          <button onClick={this.changeToRecommendMode}>スキルを作成する</button>
+          <button onClick={this.changeToRecommendMode}>スキルを推薦する</button>
           <SkillList skills={this.state.skills} updateCountToSkill={this.updateCountToSkill}/>
         </div>
       )

@@ -14,10 +14,12 @@ class UsersController < ApplicationController
     Skill.where("name like '#{params[:value]}%'").each do |skill|
       suggestions << {
         id: skill.id,
-        name: skill.name
+        name: skill.name,
+        count: 0,
+        status: "published",
       }
     end
-    render json: suggestions
+    render json: suggestions.take(6)
   end
 
   def get_skills
