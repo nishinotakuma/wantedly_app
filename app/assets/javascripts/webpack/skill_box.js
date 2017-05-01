@@ -22187,7 +22187,7 @@ var SkillBox = function (_React$Component) {
           console.log(skills);
           _this2.setState({
             skills: skills,
-            addSelectedSkills: addSelectedSkills
+            addSelectedSkills: skills
           });
         },
         error: function error(xhr, status, err) {
@@ -22247,7 +22247,11 @@ var SkillList = function (_React$Component2) {
     value: function render() {
       var _this4 = this;
 
-      var skillNodes = this.props.skills.map(function (skill) {
+      var skillNodes = this.props.skills.sort(function (a, b) {
+        if (a.count < b.count) return 1;
+        if (a.count > b.count) return -1;
+        return 0;
+      }).map(function (skill) {
         return _react2.default.createElement(Skill, { skill: skill, changeToAddMode: _this4.props.changeToAddMode, key: skill.name });
       });
       return _react2.default.createElement(
@@ -22497,17 +22501,22 @@ var Skill = function (_React$Component5) {
     key: 'render',
     value: function render() {
       return _react2.default.createElement(
-        'span',
+        'li',
         { onClick: this.props.changeToAddMode },
         _react2.default.createElement(
-          'div',
+          'span',
           null,
-          this.props.skill.count
+          "(" + this.props.skill.count + ")"
         ),
         _react2.default.createElement(
-          'div',
+          'span',
           null,
           this.props.skill.name
+        ),
+        _react2.default.createElement(
+          'a',
+          { href: '/skills/' + this.props.skill.id },
+          '\u3053\u306E\u30B9\u30AD\u30EB\u3092\u6301\u3064\u30E6\u30FC\u30B6\u4E00\u89A7\u3078'
         )
       );
     }
@@ -22529,7 +22538,7 @@ var SelectedSkill = function (_React$Component6) {
     key: 'render',
     value: function render() {
       return _react2.default.createElement(
-        'div',
+        'li',
         null,
         _react2.default.createElement(
           'button',
@@ -22537,12 +22546,12 @@ var SelectedSkill = function (_React$Component6) {
           '\u524A\u9664'
         ),
         _react2.default.createElement(
-          'div',
+          'span',
           null,
-          this.props.skill.count
+          "(" + this.props.skill.count + ")"
         ),
         _react2.default.createElement(
-          'div',
+          'span',
           null,
           this.props.skill.name
         )

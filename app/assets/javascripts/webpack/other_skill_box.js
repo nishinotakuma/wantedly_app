@@ -22007,24 +22007,168 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var OtherSkillBox = function (_React$Component) {
   _inherits(OtherSkillBox, _React$Component);
 
-  function OtherSkillBox() {
+  function OtherSkillBox(props) {
     _classCallCheck(this, OtherSkillBox);
 
-    return _possibleConstructorReturn(this, (OtherSkillBox.__proto__ || Object.getPrototypeOf(OtherSkillBox)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (OtherSkillBox.__proto__ || Object.getPrototypeOf(OtherSkillBox)).call(this, props));
+
+    _this.state = {
+      skills: [],
+      recommendMode: false
+    };
+    _this.changeToRecommendMode = _this.changeToRecommendMode.bind(_this);
+    _this.updateCountToSkill = _this.updateCountToSkill.bind(_this);
+    return _this;
   }
 
   _createClass(OtherSkillBox, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      $.ajax({
+        url: "/users/" + user_id + "/get_other_skills",
+        type: 'GET',
+        dataType: 'json',
+        cache: false,
+        success: function success(skills) {
+          console.log(skills);
+          _this2.setState({
+            skills: skills
+          });
+        },
+        error: function error(xhr, status, err) {
+          console.error(_this2.props.url, status, err.toString());
+        }
+      });
+    }
+  }, {
+    key: 'updateCountToSkill',
+    value: function updateCountToSkill(skill) {
+      var _this3 = this;
+
+      console.log(skill);
+      $.ajax({
+        url: "/users/" + user_id + "/update_count_skills",
+        type: 'POST',
+        dataType: 'json',
+        cache: false,
+        data: { skill: skill },
+        success: function success(skill) {
+          var skills = _this3.state.skills;
+
+          skills.some(function (v, i) {
+            if (v.id == skill.id) skills.splice(i, 1);
+          });
+          skills.push(skill);
+          _this3.setState({
+            skills: skills
+          });
+        },
+        error: function error(xhr, status, err) {
+          console.error(_this3.props.url, status, err.toString());
+        }
+      });
+    }
+  }, {
+    key: 'changeToRecommendMode',
+    value: function changeToRecommendMode() {
+      this.setState({ recommendMode: true });
+    }
+  }, {
     key: 'render',
     value: function render() {
       return _react2.default.createElement(
         'div',
         null,
-        'hello'
+        _react2.default.createElement(
+          'button',
+          { onClick: this.changeToRecommendMode },
+          '\u30B9\u30AD\u30EB\u3092\u63A8\u85A6\u3059\u308B'
+        ),
+        _react2.default.createElement(SkillList, { skills: this.state.skills, updateCountToSkill: this.updateCountToSkill })
       );
     }
   }]);
 
   return OtherSkillBox;
+}(_react2.default.Component);
+
+var SkillList = function (_React$Component2) {
+  _inherits(SkillList, _React$Component2);
+
+  function SkillList(props) {
+    _classCallCheck(this, SkillList);
+
+    return _possibleConstructorReturn(this, (SkillList.__proto__ || Object.getPrototypeOf(SkillList)).call(this, props));
+  }
+
+  _createClass(SkillList, [{
+    key: 'render',
+    value: function render() {
+      var _this5 = this;
+
+      var skillNodes = this.props.skills.sort(function (a, b) {
+        if (a.count < b.count) return 1;
+        if (a.count > b.count) return -1;
+        return 0;
+      }).map(function (skill) {
+        return _react2.default.createElement(Skill, { skill: skill, key: skill.name, updateCountToSkill: _this5.props.updateCountToSkill });
+      });
+      return _react2.default.createElement(
+        'div',
+        null,
+        skillNodes
+      );
+    }
+  }]);
+
+  return SkillList;
+}(_react2.default.Component);
+
+var Skill = function (_React$Component3) {
+  _inherits(Skill, _React$Component3);
+
+  function Skill(props) {
+    _classCallCheck(this, Skill);
+
+    var _this6 = _possibleConstructorReturn(this, (Skill.__proto__ || Object.getPrototypeOf(Skill)).call(this, props));
+
+    _this6._updateCountToSkill = _this6._updateCountToSkill.bind(_this6);
+    return _this6;
+  }
+
+  _createClass(Skill, [{
+    key: '_updateCountToSkill',
+    value: function _updateCountToSkill() {
+      this.props.updateCountToSkill(this.props.skill);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var class_name = this.props.skill.current_user_add ? "added" : "not_added";
+      return _react2.default.createElement(
+        'li',
+        null,
+        _react2.default.createElement(
+          'span',
+          { onClick: this._updateCountToSkill, className: class_name },
+          "(" + this.props.skill.count + ")"
+        ),
+        _react2.default.createElement(
+          'a',
+          { href: '/skills/' + this.props.skill.id },
+          _react2.default.createElement(
+            'span',
+            null,
+            this.props.skill.name
+          )
+        )
+      );
+    }
+  }]);
+
+  return Skill;
 }(_react2.default.Component);
 
 _reactDom2.default.render(_react2.default.createElement(OtherSkillBox, { user_id: user_id }), document.getElementById('other_skill_box'));

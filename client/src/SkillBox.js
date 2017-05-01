@@ -55,7 +55,7 @@ class SkillBox extends React.Component {
         console.log(skills);
         this.setState({
           skills: skills,
-          addSelectedSkills: addSelectedSkills
+          addSelectedSkills: skills
         }); },
       error: (xhr, status, err) => {
         console.error(this.props.url, status, err.toString());
@@ -100,7 +100,11 @@ class SkillList extends React.Component {
   }
 
   render () {
-    const skillNodes = this.props.skills.map((skill)=>{
+    const skillNodes = this.props.skills.sort(function(a,b){
+        if(a.count<b.count) return 1;
+        if(a.count > b.count) return -1;
+        return 0;
+    }).map((skill)=>{
       return (<Skill skill={skill} changeToAddMode={this.props.changeToAddMode} key={skill.name}/>)
     });
     return (
@@ -279,14 +283,17 @@ class Skill extends React.Component {
 
   render () {
     return (
-      <span onClick={this.props.changeToAddMode} >
-        <div>
-          {this.props.skill.count}
-        </div>
-        <div>
+      <li onClick={this.props.changeToAddMode} >
+        <span>
+          {"(" + this.props.skill.count + ")"}
+        </span>
+        <span>
           {this.props.skill.name}
-        </div>
-      </span>
+        </span>
+        <a href={'/skills/' + this.props.skill.id}>
+          このスキルを持つユーザ一覧へ
+        </a>
+      </li>
     );
   }
 }
@@ -299,15 +306,15 @@ class SelectedSkill extends React.Component {
 
   render () {
     return (
-      <div>
+      <li>
         <button onClick={this.props.deleteSelectedSkill} value={this.props.skill.name} >削除</button>
-        <div>
-          {this.props.skill.count}
-        </div>
-        <div>
+        <span>
+          {"(" + this.props.skill.count + ")"}
+        </span>
+        <span>
           {this.props.skill.name}
-        </div>
-      </div>
+        </span>
+      </li>
     );
   }
 }
