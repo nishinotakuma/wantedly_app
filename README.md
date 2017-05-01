@@ -1,24 +1,35 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## 仕様
+### 必須
+- スキルは、自分に追加することができる。
+- 他のユーザのプロフィールページで、その人にスキルを新しく追加することができる。また、既に追加されているスキルに+1することができる。
+- プロフィールでは+1された回数が表示されていて、+1が多い順に表示されている。
+- N+1問題が発生しないようにする。
+- 動作確認のため、Herokuなどを利用し、パブリックな環境にdeployしてください。
 
-Things you may want to cover:
+上記の必須項目は満たしています。
+### オプショナル
+- JavaScriptで、スキルの追加時などにページ全体の再読み込みが発生しないUIをつくる。（実装）
 
-* Ruby version
+Reactとajaxにより読み込みを最小限に抑えました。
+- +1の回数が多い上位6件は、それぞれ最大10人まで+1した人が表示されている。(未実装)
+- 他の人につけた+1をキャンセルすることができる。(実装)
 
-* System dependencies
+他人のページのスキルの左にある数字をクリックすることで追加/取り消しができます。
+- 他の人が自分につけたスキルを隠す/消すことができる。（半分実装）
 
-* Configuration
+自分のスキル編集時に消すことはできます。隠す機能は時間の関係で諦めました。
+- 同じスキルが付いている人の一覧を見ることができる。（実装）
 
-* Database creation
+スキル名をクリックしてスキルページへとびそのスキルを持つユーザー一覧を見ることができます。
+- スキルの追加時にautocompleteでスキル名が補完されるUI。（実装）
 
-* Database initialization
+入力値から、前方一致スキル名を取得し最大６件を候補に出します。
 
-* How to run the test suite
+### 課題
+- デザイン
+- Reactのファイルをコンポーネントごとに分割するなど、もう少しわかりやすくシンプルに。共通化できそうなところも多々あり。
+- Reactでの画面遷移の実装
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+その他、まだまだ実装すべき部分は多い。
