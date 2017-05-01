@@ -2,11 +2,12 @@ const path = require('path');
 
 module.exports = {
   entry: {
-    app: './src/index.js'
+    skill_box: './src/SkillBox.js',
+    other_skill_box: './src/OtherSkillBox.js',
    },
   output: {
     path: path.resolve('../app/assets/javascripts/webpack'),
-    filename: 'app.js',
+    filename: '[name].js',
   },
   module: {
     loaders: [

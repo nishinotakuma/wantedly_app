@@ -7,8 +7,6 @@ class UsersController < ApplicationController
   end
 
   def show
-    @skills = @user.skills
-    @name = "テスト"
   end
 
   def get_skills_suggestion

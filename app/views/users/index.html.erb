@@ -1,6 +1,11 @@
 <h1>ユーザー一覧</h1>
+
 <ul>
   <% @users.each do |user| %>
-    <li><%= link_to "#{user.name}", "/users/#{user.id}" %></li>
+    <% if current_user && current_user == user %>
+      <li><strong><%= link_to "#{user.name}", "/users/#{user.id}" %></strong></li>
+    <% else %>
+      <li><%= link_to "#{user.name}", "/users/#{user.id}" %></li>
+    <% end %>
   <% end %>
 </ul>

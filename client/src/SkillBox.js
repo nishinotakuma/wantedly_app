@@ -8,6 +8,7 @@ class SkillBox extends React.Component {
     super(props);
     this.state = {
       skills: [],
+      addSelectedSkills:[],
       hiddenSelectedSkills: [],
       addSkillMode: false,
       hiddenSkillMode: false
@@ -27,7 +28,9 @@ class SkillBox extends React.Component {
   }
 
   changeToListMode(){
+    const {skills} = this.state;
     this.setState({
+      addSelectedSkills: skills,
       hiddenSkillMode: false,
       addSkillMode: false
     });
@@ -36,6 +39,7 @@ class SkillBox extends React.Component {
   setNewSkills(skills){
     this.setState({
       skills: skills,
+      addSelectedSkills: skills,
       addSkillMode: false,
       hiddenSkillMode: false
     })
@@ -50,7 +54,8 @@ class SkillBox extends React.Component {
       success: (skills) => {
         console.log(skills);
         this.setState({
-          skills: skills
+          skills: skills,
+          addSelectedSkills: addSelectedSkills
         }); },
       error: (xhr, status, err) => {
         console.error(this.props.url, status, err.toString());
@@ -65,7 +70,7 @@ class SkillBox extends React.Component {
           <SkillAddForm
               changeToListMode={this.changeToListMode}
               submitAddSkills={this.submitAddSkills}
-              skills={this.state.skills}
+              addSelectedSkills={this.state.addSelectedSkills}
               setNewSkills={this.setNewSkills}
           />
         </div>
@@ -80,6 +85,7 @@ class SkillBox extends React.Component {
     else{
       return (
         <div>
+          <button onClick={this.changeToAddMode}>スキル編集</button>
           <SkillList skills={this.state.skills} changeToAddMode={this.changeToAddMode}/>
         </div>
       );
@@ -120,7 +126,7 @@ class SkillAddForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      addSelectedSkills: [],
+      addSelectedSkills: this.props.addSelectedSkills,
       value: "",
       suggestions:[]
     };
@@ -131,11 +137,6 @@ class SkillAddForm extends React.Component {
     this.onFormSubmit=this.onFormSubmit.bind(this)
     this.deleteSelectedSkill=this.deleteSelectedSkill.bind(this)
     this.submitAddSkills=this.submitAddSkills.bind(this)
-  }
-
-  componentDidMount(){
-    var skills = this.props.skills;
-    this.setState({addSelectedSkills: skills })
   }
 
   onChange(event, { newValue, method }){
@@ -217,7 +218,7 @@ class SkillAddForm extends React.Component {
     const skill = {name: value, id: null, status: "published", count: 0};
     if (!addSelectedSkills.some(function(skill){
       return (skill.name == value)
-    })){
+    }) && value){
       addSelectedSkills.push(skill);
     };
     this.setState({
@@ -235,7 +236,7 @@ class SkillAddForm extends React.Component {
             onChange: this.onChange
     };
     const selectedSkillNodes = this.state.addSelectedSkills.map((skill)=>{
-      return (<SelectedSkill skill={skill} deleteSelectedSkill={this.deleteSelectedSkill} key={skill.name} />)
+      return (<SelectedSkill skill={skill} deleteSelectedSkill={this.deleteSelectedSkill} key={"add_selected_" + skill.name} />)
     });
     return (
       <div>

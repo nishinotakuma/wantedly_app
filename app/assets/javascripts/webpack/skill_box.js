@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 184);
+/******/ 	return __webpack_require__(__webpack_require__.s = 185);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -22091,7 +22091,8 @@ module.exports = traverseAllChildren;
 module.exports = __webpack_require__(187).default;
 
 /***/ }),
-/* 184 */
+/* 184 */,
+/* 185 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22129,6 +22130,7 @@ var SkillBox = function (_React$Component) {
 
     _this.state = {
       skills: [],
+      addSelectedSkills: [],
       hiddenSelectedSkills: [],
       addSkillMode: false,
       hiddenSkillMode: false
@@ -22153,7 +22155,10 @@ var SkillBox = function (_React$Component) {
   }, {
     key: 'changeToListMode',
     value: function changeToListMode() {
+      var skills = this.state.skills;
+
       this.setState({
+        addSelectedSkills: skills,
         hiddenSkillMode: false,
         addSkillMode: false
       });
@@ -22163,6 +22168,7 @@ var SkillBox = function (_React$Component) {
     value: function setNewSkills(skills) {
       this.setState({
         skills: skills,
+        addSelectedSkills: skills,
         addSkillMode: false,
         hiddenSkillMode: false
       });
@@ -22180,7 +22186,8 @@ var SkillBox = function (_React$Component) {
         success: function success(skills) {
           console.log(skills);
           _this2.setState({
-            skills: skills
+            skills: skills,
+            addSelectedSkills: addSelectedSkills
           });
         },
         error: function error(xhr, status, err) {
@@ -22198,7 +22205,7 @@ var SkillBox = function (_React$Component) {
           _react2.default.createElement(SkillAddForm, {
             changeToListMode: this.changeToListMode,
             submitAddSkills: this.submitAddSkills,
-            skills: this.state.skills,
+            addSelectedSkills: this.state.addSelectedSkills,
             setNewSkills: this.setNewSkills
           })
         );
@@ -22275,7 +22282,7 @@ var SkillAddForm = function (_React$Component3) {
     var _this5 = _possibleConstructorReturn(this, (SkillAddForm.__proto__ || Object.getPrototypeOf(SkillAddForm)).call(this, props));
 
     _this5.state = {
-      addSelectedSkills: [],
+      addSelectedSkills: _this5.props.addSelectedSkills,
       value: "",
       suggestions: []
     };
@@ -22290,12 +22297,6 @@ var SkillAddForm = function (_React$Component3) {
   }
 
   _createClass(SkillAddForm, [{
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      var skills = this.props.skills;
-      this.setState({ addSelectedSkills: skills });
-    }
-  }, {
     key: 'onChange',
     value: function onChange(event, _ref) {
       var newValue = _ref.newValue,
@@ -22394,7 +22395,7 @@ var SkillAddForm = function (_React$Component3) {
       var skill = { name: value, id: null, status: "published", count: 0 };
       if (!addSelectedSkills.some(function (skill) {
         return skill.name == value;
-      })) {
+      }) && value) {
         addSelectedSkills.push(skill);
       };
       this.setState({
@@ -22420,7 +22421,7 @@ var SkillAddForm = function (_React$Component3) {
         onChange: this.onChange
       };
       var selectedSkillNodes = this.state.addSelectedSkills.map(function (skill) {
-        return _react2.default.createElement(SelectedSkill, { skill: skill, deleteSelectedSkill: _this6.deleteSelectedSkill, key: skill.name });
+        return _react2.default.createElement(SelectedSkill, { skill: skill, deleteSelectedSkill: _this6.deleteSelectedSkill, key: "add_selected_" + skill.name });
       });
       return _react2.default.createElement(
         'div',
@@ -22555,7 +22556,6 @@ var SelectedSkill = function (_React$Component6) {
 _reactDom2.default.render(_react2.default.createElement(SkillBox, { user_id: user_id }), document.getElementById('skill_box'));
 
 /***/ }),
-/* 185 */,
 /* 186 */
 /***/ (function(module, exports, __webpack_require__) {
 
