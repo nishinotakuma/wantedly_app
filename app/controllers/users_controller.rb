@@ -72,12 +72,31 @@ class UsersController < ApplicationController
     render json: return_skills
   end
 
+  def update_other_skill
+    if skill = Skill.find_by(name: params[:value])
+      UserSkill.create(user_id: @user.id ,skill_id: skill.id)
+    else
+      skill = @user.skills.create(name: params[:value])
+    end
+    return_skill = {
+      id: skill.id,
+      name: skill.name,
+      count: 0,
+      status: "published",
+      current_user_add: false
+    }
+    render json: return_skill
+  end
+
+
+
   def update_count_skills
     skill_info = params["skill"]
     user_skill = @user.user_skills.find_by(skill_id: skill_info["id"].to_i)
     case skill_info["current_user_add"]
     when "true"
-      AddSkillCount.destroy(user_id: current_user.id ,user_skill_id: user_skill.id)
+      add_skill_count = AddSkillCount.find_by(user_id: current_user.id ,user_skill_id: user_skill.id)
+      add_skill_count.destroy
       current_user_add = false
     when "false"
       AddSkillCount.create(user_id: current_user.id ,user_skill_id: user_skill.id)

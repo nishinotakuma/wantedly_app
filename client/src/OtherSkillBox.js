@@ -1,6 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Autosuggest from 'react-autosuggest';
 
+function getSuggestionValue(suggestion) {
+  return suggestion.name;
+}
+
+function renderSuggestion(suggestion) {
+  return (
+    <span>{suggestion.name}</span>
+  );
+}
 
 class OtherSkillBox extends React.Component {
 
@@ -9,9 +19,15 @@ class OtherSkillBox extends React.Component {
     this.state = {
       skills: [],
       recommendMode: false,
+      value:"",
+      suggestions:[]
     }
     this.changeToRecommendMode = this.changeToRecommendMode.bind(this);
     this.updateCountToSkill = this.updateCountToSkill.bind(this);
+    this.onChange=this.onChange.bind(this);
+    this.onSuggestionsFetchRequested=this.onSuggestionsFetchRequested.bind(this);
+    this.onSuggestionsClearRequested=this.onSuggestionsClearRequested.bind(this);
+    this.submitAddSkills=this.submitAddSkills.bind(this)
   }
 
   componentDidMount() {
@@ -55,16 +71,109 @@ class OtherSkillBox extends React.Component {
   }
 
   changeToRecommendMode(){
-    this.setState({recommendMode: true});
+    const {recommendMode} = this.state;
+    this.setState({recommendMode: !recommendMode});
   }
 
+  onChange(event, { newValue, method }){
+    this.setState({
+      value: newValue
+    });
+  };
+
+  submitAddSkills(){
+    const url = "/users/" + user_id + "/update_other_skill";
+    const {value,skills} = this.state;
+    if (skills.some(function(skill){
+      return (skill.name == value)
+    })){
+      this.setState({value: ""})
+      return true
+    }
+    $.ajax({
+            url: url,
+            dataType: 'json',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({value: value}),
+            success: function (skill) {
+              const {skills} = this.state;
+              skills.push(skill);
+              this.setState({
+                skills: skills,
+                value:""
+              });
+            }.bind(this),
+            error: function (xhr, status, err) {
+                console.error(status, err.toString());
+            }.bind(this)
+        });
+  }
+
+  onSuggestionsFetchRequested({ value }){
+    const url = "/users/" + user_id + "/get_skills_suggestion";
+    const {addSelectedSkills} = this.state;
+    $.ajax({
+            url: url,
+            dataType: 'json',
+            type: 'GET',
+            data: {value: value},
+            success: function (data) {
+              const {skills} = this.state;
+              const filteredSuggestion = data.filter(function(skill){
+                return !(skills.some(function(existSkill){
+                  return (existSkill.name === skill.name)
+                }))
+              });
+              this.setState({suggestions: filteredSuggestion});
+            }.bind(this),
+            error: function (xhr, status, err) {
+                console.error(status, err.toString());
+            }.bind(this)
+        });
+  };
+
+  onSuggestionsClearRequested(){
+    this.setState({
+      suggestions: []
+    });
+  };
+
   render (){
-    return (
-      <div>
-        <button onClick={this.changeToRecommendMode}>スキルを推薦する</button>
-        <SkillList skills={this.state.skills} updateCountToSkill={this.updateCountToSkill}/>
-      </div>
-    )
+    if (this.state.recommendMode){
+      const getSuggestionValue = suggestion => suggestion.name;
+      const {value, suggestions} = this.state;
+      const inputProps = {
+              placeholder: 'スキルを入力',
+              value,
+              onChange: this.onChange
+      };
+      return (
+        <div>
+          <button onClick={this.changeToRecommendMode}>キャンセル</button>
+          <form onSubmit={this.onFormSubmit}>
+            <Autosuggest
+                suggestions={suggestions}
+                onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+                onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+                getSuggestionValue={getSuggestionValue}
+                renderSuggestion={renderSuggestion}
+                inputProps={inputProps}
+            />
+          </form>
+          <button onClick={this.submitAddSkills}>作成</button>
+          <SkillList skills={this.state.skills} updateCountToSkill={this.updateCountToSkill}/>
+        </div>
+      )
+    } else{
+      return (
+        <div>
+          <button onClick={this.changeToRecommendMode}>スキルを作成する</button>
+          <SkillList skills={this.state.skills} updateCountToSkill={this.updateCountToSkill}/>
+        </div>
+      )
+
+    }
   }
 }
 

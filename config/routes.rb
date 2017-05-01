@@ -8,5 +8,6 @@ Rails.application.routes.draw do
   get 'users/:id/get_other_skills', to: 'users#get_other_skills'
   get 'users/:id/get_skills_suggestion', to: 'users#get_skills_suggestion'
   post 'users/:id/update_skills', to: 'users#update_skills'
+  post 'users/:id/update_other_skill', to: 'users#update_other_skill'
   post 'users/:id/update_count_skills', to: 'users#update_count_skills'
 end
